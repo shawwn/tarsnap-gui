@@ -132,4 +132,8 @@ osx {
     # Add VERSION to the app bundle.  (Why doesn't qmake do this?)
     INFO_PLIST_PATH = $$shell_quote($${OUT_PWD}/$${TARGET}.app/Contents/Info.plist)
     QMAKE_POST_LINK += /usr/libexec/PlistBuddy -c \"Set :CFBundleGetInfoString $${VERSION}\" $${INFO_PLIST_PATH} ;
+
+    bin.files  = bin
+    bin.path   = Contents/MacOS
+    QMAKE_BUNDLE_DATA += bin
 }

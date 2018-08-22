@@ -1,0 +1,20 @@
+#!/bin/sh
+
+dir="$(pwd)"
+bin="$0"
+while [ -L "${bin}" ]
+do
+    x="$(readlink "${bin}")"
+    cd "$(dirname "${bin}")"
+    bin="${x}"
+done
+cd "$(dirname "${bin}")"/.. || exit 1
+home="$(pwd)"
+cd "${dir}"
+
+case `uname` in
+  Darwin) exec "${home}/Tarsnap" "$@";;
+  *) exec "${home}/tarsnap-gui" "$@";;
+esac
+
+
