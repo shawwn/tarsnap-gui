@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Determine path to this script's directory.
+dir="$(pwd)"
+bin="$0"
+while [ -L "${bin}" ]
+do
+    x="$(readlink "${bin}")"
+    cd "$(dirname "${bin}")"
+    bin="${x}"
+done
+cd "$(dirname "${bin}")"/.. || exit 1
+home="$(pwd)"
+
+# Configure platforms.
+case `uname` in
+  Darwin)
+    launchctl remove com.tarsnap.gui
+    launchctl load "${home}/bin/com.tarsnap.gui.plist"
+    ;;
+esac
