@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Determine path to this script's directory.
 dir="$(pwd)"
 bin="$0"
 while [ -L "${bin}" ]
@@ -10,11 +11,18 @@ do
 done
 cd "$(dirname "${bin}")"/.. || exit 1
 home="$(pwd)"
-cd "${dir}"
 
+# Configure platforms.
 case `uname` in
-  Darwin) exec "${home}/Tarsnap" "$@";;
-  *) exec "${home}/tarsnap-gui" "$@";;
+  Darwin)
+    cd "${HOME}/Downloads" || exit 2
+    bin=Tarsnap
+    log="${HOME}/Library/Logs/tarsnap-gui.log";;
+  *)
+    cd "${HOME}" || exit 2
+    bin=tarsnap-gui
+    log="${HOME}/tarsnap-gui.log";;
 esac
 
-
+# Run tarsnap-gui, logging to ${log}.
+2>&1 "${home}/${bin}" "$@" | tee -a "${log}"
